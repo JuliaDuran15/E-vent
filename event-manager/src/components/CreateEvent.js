@@ -93,7 +93,7 @@ function CreateEvent() {
       {isSuccess && eventSuccessMessage && (
         <p className="event-success-message">{eventSuccessMessage}</p>
       )}
-
+      
     </div>
   );
 }
