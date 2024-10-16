@@ -1,0 +1,64 @@
+/* Estilos gerais para o container */
+.login-container {
+    width: 350px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Título do formulário */
+.login-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+/* Formulário de login */
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Estilo dos campos de entrada */
+.input-field {
+    margin-bottom: 20px;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    transition: border-color 0.3s ease-in-out;
+}
+
+/* Efeito ao focar no campo de entrada */
+.input-field:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+}
+
+/* Estilo do botão de login */
+
+/* Mensagem de sucesso */
+.message-success {
+    color: #4CAF50;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+/* Mensagem de erro */
+.message-error {
+    color: red;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+/* Estilo de fundo para a página de login */
+body {
+    background-color: #f0f4f7;
+    font-family: 'Arial', sans-serif;
+}
