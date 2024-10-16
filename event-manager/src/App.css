@@ -6,7 +6,10 @@ html, body {
   flex-direction: column;
   justify-content: center; /* Centraliza horizontalmente */
   align-items: center; /* Centraliza verticalmente */
-  background-color: #e0e5ec; /* Cor suave de fundo */
+  background-image: url('./images/event-background.jpg');
+  background-size: cover; /* Faz a imagem cobrir todo o fundo */
+  background-position: center; /* Centraliza a imagem */
+  background-repeat: no-repeat; /* Evita que a imagem se repita */
 }
 
 .container {
@@ -78,6 +81,8 @@ html, body {
   left: 0;
   background-color: #333; /* cor de fundo da navbar*/
   padding: 15px 0;
+  display:flex;
+  align-items: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   z-index: 1000; /* Garante que a navbar sempre fique acima do conteúdo */
 }

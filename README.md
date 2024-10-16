@@ -7,7 +7,7 @@ organizadores e clientes, criação de eventos e gerenciamento de participantes.
 
 1. Clone o repositório para sua máquina local:
 ```bash
-git clone https://github.com/JuliaDuran15/ElectronTest
+git clone https://github.com/JuliaDuran15/E-vent.git
  ```
 2. Navegue até o diretório do projeto:
 ```bash
