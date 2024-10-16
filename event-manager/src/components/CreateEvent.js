@@ -12,6 +12,7 @@ function CreateEvent() {
 
   const [message, setMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(null); // Para controlar se a mensagem é de sucesso ou erro
+  const [eventSuccessMessage, setEventSuccessMessage] = useState('');
 
   const handleChange = (e) => {
     setEvent({ ...event, [e.target.name]: e.target.value });
@@ -29,6 +30,7 @@ function CreateEvent() {
       const response = await axios.post('http://localhost:5000/create-event', event);
       setMessage(response.data.message);
       setIsSuccess(true); // Define como sucesso
+      setEventSuccessMessage(`Evento ${event.name} criado com sucesso!`);
       setEvent({ name: '', date: '', location: '', participants: '' });
     } catch (error) {
       setMessage('Erro ao criar o evento. Tente novamente.');
@@ -87,6 +89,11 @@ function CreateEvent() {
       {message && (
         <p className={isSuccess ? 'message-success' : 'message-error'}>{message}</p>
       )}
+
+      {isSuccess && eventSuccessMessage && (
+        <p className="event-success-message">{eventSuccessMessage}</p>
+      )}
+
     </div>
   );
 }
