@@ -13,7 +13,6 @@ function CreateEvent() {
   const [message, setMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(null); // Para controlar se a mensagem é de sucesso ou erro
 
-
   const handleChange = (e) => {
     setEvent({ ...event, [e.target.name]: e.target.value });
   };

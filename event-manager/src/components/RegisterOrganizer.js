@@ -11,7 +11,7 @@ function RegisterOrganizer() {
   });
   const [message, setMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(null); // Para controlar se a mensagem é de sucesso ou erro
-
+  const [welcomeMessage, setWelcomeMessage] = useState('');
 
   const handleChange = (e) => {
     setOrganizer({ ...organizer, [e.target.name]: e.target.value });
@@ -23,6 +23,7 @@ function RegisterOrganizer() {
       const response = await axios.post('http://localhost:5000/register', organizer);
       setMessage(response.data.message);
       setIsSuccess(true); // Define como sucesso
+      setWelcomeMessage(`Bem-vindo(a), ${organizer.name}! Seu cadastro foi realizado com sucesso!`);
       setOrganizer({ name: '', email: '', password: '' });
     } catch (error) {
       setMessage('Erro ao registrar o organizador.');
@@ -70,6 +71,11 @@ function RegisterOrganizer() {
       {message && (
         <p className={isSuccess ? 'message-success' : 'message-error'}>{message}</p>
       )}
+
+      {isSuccess && welcomeMessage && (
+        <p className="welcome-message">{welcomeMessage}</p>
+      )}
+
     </div>
   );
 
