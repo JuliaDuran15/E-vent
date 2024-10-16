@@ -90,6 +90,10 @@ function CreateEvent() {
         <p className={isSuccess ? 'message-success' : 'message-error'}>{message}</p>
       )}
 
+      {isSuccess && eventSuccessMessage && (
+        <p className="event-success-message">{eventSuccessMessage}</p>
+      )}
+      
     </div>
   );
 }
