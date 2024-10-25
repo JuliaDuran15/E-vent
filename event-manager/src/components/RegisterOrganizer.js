@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './RegisterOrganizer.css'; // Importa o arquivo de estilo
+import { useNavigate } from 'react-router-dom';
 
 function RegisterOrganizer() {
   const [organizer, setOrganizer] = useState({
@@ -12,6 +13,7 @@ function RegisterOrganizer() {
   const [message, setMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(null); // Para controlar se a mensagem é de sucesso ou erro
   const [welcomeMessage, setWelcomeMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setOrganizer({ ...organizer, [e.target.name]: e.target.value });
@@ -25,6 +27,7 @@ function RegisterOrganizer() {
       setIsSuccess(true); // Define como sucesso
       setWelcomeMessage(`Bem-vindo(a), ${organizer.name}! Seu cadastro foi realizado com sucesso!`);
       setOrganizer({ name: '', email: '', password: '' });
+      navigate('/home');
     } catch (error) {
       setMessage('Erro ao registrar o organizador.');
       setIsSuccess(false); // Define como erro

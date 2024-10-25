@@ -1,0 +1,62 @@
+/* Navbar Estilizada */
+.navbar {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #333; /* Cor de fundo da navbar */
+    padding: 15px 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Alinha logo e itens juntos */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* Garante que a navbar fique acima do conteúdo */
+}
+
+/* Agrupamento do logo e texto */
+.navbar-logo {
+    display: flex;
+    align-items: center;
+}
+
+/* Lista de navegação */
+.navbar-list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    margin-left: 20px; /* Espaço entre o logo e os itens */
+}
+
+.navbar-item {
+    margin: 0 10px;
+}
+
+.navbar-link {
+    color: #f0f0f5;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px 15px;
+    background-color: #444; /* Cor de fundo dos links */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    border-radius: 5px;
+}
+
+.navbar-link:hover {
+    background-color: #C40CE6;
+    transform: translateY(-2px);
+}
+
+.logo {
+    margin-left: 20px; /* Espaço entre a borda e a logo */
+    width: 90px; /* Tamanho da logo */
+    height: auto; /* Mantém a proporção */
+    vertical-align: middle; /* Alinha verticalmente a logo */
+}
+
+.logo-text {
+    font-size: 24px; /* Ajuste o tamanho da fonte conforme necessário */
+    color: #f0f0f5; /* Cor do texto */
+    vertical-align: middle; /* Alinha verticalmente com a logo */
+    margin-left: 10px; /* Espaço entre a logo e o texto */
+}

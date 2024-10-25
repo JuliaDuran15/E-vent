@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './Register.css'; // Importa o arquivo de estilo
+import { useNavigate } from 'react-router-dom';
 
 function Register() {
   const [user, setUser] = useState({
@@ -11,6 +12,7 @@ function Register() {
   });
   const [message, setMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(null); // Para controlar se a mensagem é de sucesso ou erro
+  const navigate = useNavigate();
 
 
   const handleChange = (e) => {
@@ -24,6 +26,7 @@ function Register() {
       setMessage(response.data.message);
       setIsSuccess(true); // Define como sucesso
       setUser({ name: '', email: '', password: '' });
+      navigate('/home');
     } catch (error) {
       setMessage('Erro ao registrar o usuário.');
       setIsSuccess(false); // Define como erro

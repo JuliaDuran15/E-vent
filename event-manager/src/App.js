@@ -1,40 +1,24 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import CreateEvent from './components/CreateEvent';
 import Register from './components/Register';
 import RegisterOrganizer from './components/RegisterOrganizer';
-import Login from './components/Login'; // Importa o componente de login
-import logo from './images/e-vent-logo.png';
-import './App.css'; // Arquivo CSS para adicionar estilos
+import Login from './components/Login'; 
+import Home from './components/Home';
+import Header from './components/Header'; // Importe o novo componente de navegação
+import './App.css'; 
 
 function App() {
   return (
     <Router>
       <div>
-        <nav className="navbar fixed-nav">
-          <img src={logo} alt="logo" className="logo" />
-          <span className='logo-text'>e-vent</span>
-          <ul className="navbar-list">
-            <li className="navbar-item">
-              <Link to="/" className="navbar-link">Registrar Usuário</Link>
-            </li>
-            <li className="navbar-item">
-              <Link to="/organizer" className="navbar-link">Registrar Organizador</Link>
-            </li>
-            <li className="navbar-item">
-              <Link to="/create-event" className="navbar-link">Criar Evento</Link>
-            </li>
-            <li className="navbar-item">
-              <Link to="/login" className="navbar-link">Login</Link> {/* Link para a rota de login */}
-            </li>
-          </ul>
-        </nav>
-
+        <Header /> {/* Componente de navegação */}
         <Routes>
           <Route path="/" element={<Register />} />
           <Route path="/organizer" element={<RegisterOrganizer />} />
           <Route path="/create-event" element={<CreateEvent />} />
-          <Route path="/login" element={<Login />} /> {/* Nova rota de login */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/home" element={<Home />} />
         </Routes>
       </div>
     </Router>
