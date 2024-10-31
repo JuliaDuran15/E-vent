@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './RegisterOrganizer.css'; // Importa o arquivo de estilo
+import '../styles/RegisterOrganizer.css'; // Importa o arquivo de estilo
 import { useNavigate } from 'react-router-dom';
 
 function RegisterOrganizer() {

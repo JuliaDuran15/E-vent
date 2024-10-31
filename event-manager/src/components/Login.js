@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './Login.css'; // Importa o arquivo de estilo
+import '../styles/Login.css';
+import { AuthContext } from './AuthContext'; // Importa o AuthContext
 
 function Login() {
   const [user, setUser] = useState({
@@ -11,6 +12,7 @@ function Login() {
   const [message, setMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(null);
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext); // Usa o contexto para acessar a função de login
 
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -22,8 +24,18 @@ function Login() {
       const response = await axios.post('http://localhost:5000/login', user);
       setMessage(response.data.message);
       setIsSuccess(true);
+
       if (response.data.message === 'Login bem-sucedido!') {
-        navigate('/home');
+        login(); // Chama a função de login para atualizar o estado de autenticação
+
+
+        // (NÃO SOU O CHATGPT!!!!!!!!!) VER NO BANCO DE DADOS A ROLE REFERENTE AO EMAIL
+        
+        //SE FOR ORGANIZADOR -> /OrgView
+
+        //SE FOR USUARIO COMUM -> /UserView
+
+        navigate('/home'); // Redireciona o usuário para a página inicial
       }
       setUser({ email: '', password: '' });
     } catch (error) {

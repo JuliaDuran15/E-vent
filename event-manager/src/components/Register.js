@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
-import './Register.css'; // Importa o arquivo de estilo
+import '../styles/Register.css'; // Importa o arquivo de estilo
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from './AuthContext'; // Importa o AuthContext
 
 function Register() {
+  const { login } = useContext(AuthContext); // Acessa a função de login do contexto
   const [user, setUser] = useState({
     name: '',
     email: '',
@@ -13,7 +15,6 @@ function Register() {
   const [message, setMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(null); // Para controlar se a mensagem é de sucesso ou erro
   const navigate = useNavigate();
-
 
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -25,12 +26,21 @@ function Register() {
       const response = await axios.post('http://localhost:5000/register', user);
       setMessage(response.data.message);
       setIsSuccess(true); // Define como sucesso
-      setUser({ name: '', email: '', password: '' });
-      navigate('/home');
+      login(); // Chama a função de login do contexto para marcar o usuário como logado
+
+        // (NÃO SOU O CHATGPT!!!!!!!!!) VER NO BANCO DE DADOS A ROLE REFERENTE AO EMAIL
+        
+        //SE FOR ORGANIZADOR -> /OrgView
+
+        //SE FOR USUARIO COMUM -> /UserView
+
+
+
+
+      navigate('/home'); // Redireciona para a página inicial após o registro
     } catch (error) {
       setMessage('Erro ao registrar o usuário.');
       setIsSuccess(false); // Define como erro
-
     }
   };
 
@@ -71,7 +81,7 @@ function Register() {
       {message && (
         <p className={isSuccess ? 'message-success' : 'message-error'}>{message}</p>
       )}
-      </div>
+    </div>
   );
 }
 

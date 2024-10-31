@@ -1,12 +1,12 @@
 import React from 'react';
-import '../styles/Home.css'; // Arquivo de estilos separado
+import '../styles/UserView.css'; // Arquivo de estilos separado
 
 function Home() {
   return (
     <div className="home-container">
       <div className="hero">
         <h1>Bem-vindo à E-vent</h1>
-        <p>Descubra, organize e participe dos melhores eventos</p>
+        <p>USUARIO BEM VINDO</p>
         <button className="cta-button">Explorar Eventos</button>
       </div>
     </div>

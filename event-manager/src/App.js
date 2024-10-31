@@ -6,6 +6,7 @@ import RegisterOrganizer from './components/RegisterOrganizer';
 import Login from './components/Login'; 
 import Home from './components/Home';
 import Header from './components/Header'; // Importe o novo componente de navegação
+import ProtectedRoute from './components/ProtectedRoute';
 import './App.css'; 
 
 function App() {
@@ -18,7 +19,13 @@ function App() {
           <Route path="/organizer" element={<RegisterOrganizer />} />
           <Route path="/create-event" element={<CreateEvent />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/home" element={<Home />} />
+          <Route path="/home"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            } />
+          
         </Routes>
       </div>
     </Router>

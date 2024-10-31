@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './CreateEvent.css'; // Importa o arquivo de estilo
+import '../styles/CreateEvent.css'; // Importa o arquivo de estilo
 
 function CreateEvent() {
   const [event, setEvent] = useState({

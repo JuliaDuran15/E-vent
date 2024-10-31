@@ -2,15 +2,18 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { AuthProvider } from './components/AuthContext'; // Importa o AuthProvider
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <AuthProvider>
+      <App />
+    </AuthProvider>
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+// Se quiser começar a medir o desempenho da sua aplicação, passe uma função para logar resultados 
+// (por exemplo: reportWebVitals(console.log)) ou envie para um endpoint de análise.
+// Saiba mais em: https://bit.ly/CRA-vitals
 reportWebVitals();
