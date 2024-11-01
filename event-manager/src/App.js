@@ -7,6 +7,8 @@ import Login from './components/Login';
 import Home from './components/Home';
 import Header from './components/Header'; // Importe o novo componente de navegação
 import ProtectedRoute from './components/ProtectedRoute';
+import EventList from './components/EventList';
+
 import './App.css'; 
 
 function App() {
@@ -25,7 +27,13 @@ function App() {
                 <Home />
               </ProtectedRoute>
             } />
-          
+           <Route path="/events"
+            element={
+              <ProtectedRoute>
+                <EventList />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </div>
     </Router>

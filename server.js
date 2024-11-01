@@ -9,7 +9,7 @@ const User = require('./models/User');
 const app = express();
 const bcrypt = require('bcrypt');
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
 // Sincronizar os modelos com o banco de dados PostgreSQL
 sequelize.sync({ force: true })
@@ -60,14 +60,25 @@ app.post('/register', async (req, res) => {
       }
   
       // Se a senha for correta, faça o login
-      res.json({ message: 'Login bem-sucedido!' });
+      res.json({ message: 'Login bem-sucedido!', role: user.role });
     } catch (error) {
       console.error('Erro ao fazer login:', error);
       res.status(500).json({ message: 'Erro ao fazer login.' });
     }
   });
   
+// Rota para listar todos os eventos
+app.get('/events', async (req, res) => {
+  try {
+    const events = await Event.findAll();
+    res.json(events);
+  } catch (error) {
+    console.error('Erro ao buscar eventos:', error);
+    res.status(500).json({ message: 'Erro ao buscar eventos' });
+  }
+});
 
+  
 
 // Iniciar o servidor
 app.listen(5000, () => {
