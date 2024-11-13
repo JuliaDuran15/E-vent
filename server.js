@@ -22,7 +22,7 @@ app.post('/create-event', async (req, res) => {
   
   try {
     const newEvent = await Event.create({ name, date, location, participants });
-    res.status(201).json({ message: 'Evento criado com sucesso!' });
+    res.status(201).json({ message: 'Evento criado com sucesso![]' });
   } catch (error) {
     res.status(500).json({ message: 'Erro ao criar o evento', error });
   }

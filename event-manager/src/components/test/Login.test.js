@@ -23,7 +23,7 @@ describe('Login Component', () => {
 
     fireEvent.click(screen.getByText('Login'));
 
-    expect(await screen.findByText('Login bem-sucedido!')).toBeInTheDocument();
+    expect(await screen.findByText('Login bem-sucedido')).toBeInTheDocument();
   });
 
   it('shows error message on login failure', async () => {

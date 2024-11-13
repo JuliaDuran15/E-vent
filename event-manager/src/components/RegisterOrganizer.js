@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import '../styles/RegisterOrganizer.css'; // Importa o arquivo de estilo
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from './AuthContext'; // Importa o AuthContext
 
 function RegisterOrganizer() {
+  const { login } = useContext(AuthContext); // Acessa a função de login do contexto
   const [organizer, setOrganizer] = useState({
     name: '',
     email: '',
@@ -26,8 +28,15 @@ function RegisterOrganizer() {
       setMessage(response.data.message);
       setIsSuccess(true); // Define como sucesso
       setWelcomeMessage(`Bem-vindo(a), ${organizer.name}! Seu cadastro foi realizado com sucesso!`);
-      setOrganizer({ name: '', email: '', password: '' });
-      navigate('/home');
+      login(organizer.role); // Chama a função de login para atualizar o estado de autenticação
+        if (organizer.role === 1){
+          navigate('/userview');
+        }
+        else if(organizer.role === 2){
+          navigate('/orgview');
+        }
+        
+        navigate('/unauthorized');
     } catch (error) {
       setMessage('Erro ao registrar o organizador.');
       setIsSuccess(false); // Define como erro

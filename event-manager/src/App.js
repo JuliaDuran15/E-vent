@@ -4,12 +4,15 @@ import CreateEvent from './components/CreateEvent';
 import Register from './components/Register';
 import RegisterOrganizer from './components/RegisterOrganizer';
 import Login from './components/Login'; 
-import Home from './components/Home';
 import Header from './components/Header'; // Importe o novo componente de navegação
 import ProtectedRoute from './components/ProtectedRoute';
-import EventList from './components/EventList';
 
+import UserView from './components/UserView'
+import OrgView from './components/OrgView'
+import Unauthorized from './components/Unauthorized';
 import './App.css'; 
+import Home from './components/UserView';
+import EventList from './components/EventList';
 
 function App() {
   return (
@@ -17,23 +20,26 @@ function App() {
       <div>
         <Header /> {/* Componente de navegação */}
         <Routes>
-          <Route path="/" element={<Register />} />
+          <Route path="/" element={<Home />} />
           <Route path="/organizer" element={<RegisterOrganizer />} />
           <Route path="/create-event" element={<CreateEvent />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/home"
+          <Route path="/register" element={<Register />} />
+          <Route path="/events" element={<EventList />} />
+          <Route path="/userview" 
             element={
-              <ProtectedRoute>
-                <Home />
+              <ProtectedRoute allowedRoles={[1]}>
+                <UserView />
               </ProtectedRoute>
             } />
-           <Route path="/events"
-            element={
-              <ProtectedRoute>
-                <EventList />
+          <Route path="/orgview"
+             element={
+              <ProtectedRoute allowedRoles={[2]}>
+                <OrgView />
               </ProtectedRoute>
-            }
-          />
+            } />
+          <Route path="/unauthorized" element={<Unauthorized />} />
+
         </Routes>
       </div>
     </Router>

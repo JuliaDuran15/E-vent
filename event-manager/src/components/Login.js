@@ -1,3 +1,5 @@
+// login.js
+
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -25,19 +27,17 @@ function Login() {
       setMessage(response.data.message);
       setIsSuccess(true);
 
-      if (response.data.message === 'Login bem-sucedido!') {
-        login(); // Chama a função de login para atualizar o estado de autenticação
-
-
-        // (NÃO SOU O CHATGPT!!!!!!!!!) VER NO BANCO DE DADOS A ROLE REFERENTE AO EMAIL
+      if (response.data.role != null) {
+        login(response.data.role); // Chama a função de login para atualizar o estado de autenticação
+        if (response.data.role === 1){
+          navigate('/userview');
+        }
+        else if(response.data.role === 2){
+          navigate('/orgview');
+        }
         
-        //SE FOR ORGANIZADOR -> /OrgView
-
-        //SE FOR USUARIO COMUM -> /UserView
-
-        navigate('/home'); // Redireciona o usuário para a página inicial
       }
-      setUser({ email: '', password: '' });
+      
     } catch (error) {
       setMessage('Erro ao fazer login.');
       setIsSuccess(false);

@@ -18,7 +18,6 @@ function Home() {
     <div className="home-container">
       <div className="hero">
         <h1>Bem-vindo à E-vent</h1>
-        <p>USUARIO BEM VINDO</p>
         <button className="cta-button" onClick={handleExploreClick}>
           Explorar Eventos
         </button>

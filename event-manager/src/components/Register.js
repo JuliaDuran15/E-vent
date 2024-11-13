@@ -26,18 +26,14 @@ function Register() {
       const response = await axios.post('http://localhost:5000/register', user);
       setMessage(response.data.message);
       setIsSuccess(true); // Define como sucesso
-      login(); // Chama a função de login do contexto para marcar o usuário como logado
-
-        // (NÃO SOU O CHATGPT!!!!!!!!!) VER NO BANCO DE DADOS A ROLE REFERENTE AO EMAIL
+      login(user.role); // Chama a função de login para atualizar o estado de autenticação
+        if (user.role === 1){
+          navigate('/userview');
+        }
+        else if(user.role === 2){
+          navigate('/orgview');
+        }
         
-        //SE FOR ORGANIZADOR -> /OrgView
-
-        //SE FOR USUARIO COMUM -> /UserView
-
-
-
-
-      navigate('/home'); // Redireciona para a página inicial após o registro
     } catch (error) {
       setMessage('Erro ao registrar o usuário.');
       setIsSuccess(false); // Define como erro
