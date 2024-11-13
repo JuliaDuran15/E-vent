@@ -36,7 +36,7 @@ function RegisterOrganizer() {
           navigate('/orgview');
         }
         
-        navigate('/unauthorized');
+
     } catch (error) {
       setMessage('Erro ao registrar o organizador.');
       setIsSuccess(false); // Define como erro

@@ -3,17 +3,20 @@ import { Navigate } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
-  const { userRole } = useContext(AuthContext);
+  const { userRole, logout } = useContext(AuthContext);
 
-  if(userRole === null){
+  // Se o userRole for `null`, faz logout e redireciona para a página de login
+  if (userRole === null) {
+    logout();
     return <Navigate to="/login" />;
   }
 
+  // Se o userRole não está incluído nos allowedRoles, redireciona para a página não autorizada
   if (!allowedRoles.includes(userRole)) {
-    // Redireciona para a página inicial ou para uma página de erro caso o userRole não esteja autorizado
     return <Navigate to="/unauthorized" />;
   }
 
+  // Renderiza os filhos se o usuário tiver permissão
   return children;
 };
 
