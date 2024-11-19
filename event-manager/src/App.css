@@ -72,9 +72,8 @@ html, body {
 }
 
 .message {
-  margin-top: 15px;
-  font-size: 14px;
-  color: #d9534f;
+  margin-top: 10px;
+  font-size: 10px;
   text-align: center;
 }
 

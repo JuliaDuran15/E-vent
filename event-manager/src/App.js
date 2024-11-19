@@ -13,6 +13,9 @@ import Unauthorized from './components/Unauthorized';
 import './App.css'; 
 import Home from './components/UserView';
 import EventList from './components/EventList';
+import MyEventsOrg from './components/MyEventsOrg';
+import MyEventsUser from './components/MyEventsUser';
+
 
 function App() {
   return (
@@ -22,7 +25,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/organizer" element={<RegisterOrganizer />} />
-          <Route path="/create-event" element={<CreateEvent />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/events" element={<EventList />} />
@@ -38,6 +40,24 @@ function App() {
                 <OrgView />
               </ProtectedRoute>
             } />
+            <Route
+              path="/create-event"
+              element={
+                <ProtectedRoute allowedRoles={[2]}>
+                  <CreateEvent />
+                </ProtectedRoute>
+              }
+            />
+            <Route 
+            path="/my-events-org" 
+            element={
+              <ProtectedRoute allowedRoles={[2]}>
+              <MyEventsOrg />
+            </ProtectedRoute>
+          } />
+        <Route path="/my-events-user" element={<MyEventsUser />} />
+
+
           <Route path="/unauthorized" element={<Unauthorized />} />
 
         </Routes>

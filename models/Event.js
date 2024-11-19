@@ -17,6 +17,12 @@ const Event = sequelize.define('Event', {
   participants: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    defaultValue: 0, // Define o valor inicial como 0
+
+  },
+  organizerId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
   },
 });
 

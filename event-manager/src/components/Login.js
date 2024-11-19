@@ -16,28 +16,29 @@ function Login() {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext); // Usa o contexto para acessar a função de login
 
+
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
+    
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:5000/login', user);
+
       setMessage(response.data.message);
       setIsSuccess(true);
+  
+        login(response.data.role, response.data.name, response.data.userId);
+        if (response.data.role != null) {
 
-      if (response.data.role != null) {
-        login(response.data.role); // Chama a função de login para atualizar o estado de autenticação
-        if (response.data.role === 1){
+        if (response.data.role === 1) {
           navigate('/userview');
-        }
-        else if(response.data.role === 2){
+        } else if (response.data.role === 2) {
           navigate('/orgview');
         }
-        
       }
-      
     } catch (error) {
       setMessage('Erro ao fazer login.');
       setIsSuccess(false);

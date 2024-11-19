@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
-import '../styles/CreateEvent.css'; // Importa o arquivo de estilo
+import { AuthContext } from './AuthContext';
+import '../styles/CreateEvent.css';
 
 function CreateEvent() {
+  const { userId } = useContext(AuthContext);
+
   const [event, setEvent] = useState({
     name: '',
     date: '',
     location: '',
-    participants: ''
-  });
+    participants: '',
 
+  });
   const [message, setMessage] = useState('');
-  const [isSuccess, setIsSuccess] = useState(null); // Para controlar se a mensagem é de sucesso ou erro
-  const [eventSuccessMessage, setEventSuccessMessage] = useState('');
+  const [isSuccess, setIsSuccess] = useState(null);
 
   const handleChange = (e) => {
     setEvent({ ...event, [e.target.name]: e.target.value });
@@ -27,14 +29,22 @@ function CreateEvent() {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/create-event', event);
+      console.log('Dados enviados para o backend:', {
+        ...event,
+        organizerId: userId,
+      });
+
+      const response = await axios.post('http://localhost:5000/create-event', {
+        ...event,
+        organizerId: userId, // Usa o userId corretamente
+      });
+      
       setMessage(response.data.message);
-      setIsSuccess(true); // Define como sucesso
-      setEventSuccessMessage(`Evento ${event.name} criado com sucesso!`);
+      setIsSuccess(true);
       setEvent({ name: '', date: '', location: '', participants: '' });
     } catch (error) {
-      setMessage('Erro ao criar o evento. Tente novamente.');
-      setIsSuccess(false); // Define como erro
+      setMessage('Erro ao criar o evento. Tente novamente.', error);
+      setIsSuccess(false);
     }
   };
 
@@ -84,16 +94,7 @@ function CreateEvent() {
 
         <button type="submit" className="submit-btn">Criar Evento</button>
       </form>
-
-
-      {message && (
-        <p className={isSuccess ? 'message-success' : 'message-error'}>{message}</p>
-      )}
-
-      {isSuccess && eventSuccessMessage && (
-        <p className="event-success-message">{eventSuccessMessage}</p>
-      )}
-      
+      {message && <p className={isSuccess ? 'message-success' : 'message-error'}>{message}</p>}
     </div>
   );
 }

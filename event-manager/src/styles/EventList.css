@@ -75,3 +75,31 @@
     background-color: #3d0773;
     transform: translateY(-2px);
 }
+
+/* Estilo do Botão Join */
+.join-btn {
+    background-color: #4e0993;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    margin-top: 10px;
+}
+
+.join-btn:hover {
+    background-color: #3d0773;
+    transform: translateY(-2px);
+}
+
+.join-btn:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    box-shadow: none;
+}

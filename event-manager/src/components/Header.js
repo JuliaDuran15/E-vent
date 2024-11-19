@@ -1,13 +1,15 @@
-// Header.js
 import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from './AuthContext'; // Importa o contexto de autenticação
+import { AuthContext } from './AuthContext';
 import logo from '../images/e-vent-logo.png';
 import '../styles/Header.css';
 
 function Header() {
   const navigate = useNavigate();
-  const { isLoggedIn, logout } = useContext(AuthContext); // Acessa o estado e funções de login/logout
+  const { isLoggedIn, userRole, logout } = useContext(AuthContext);
+
+  // Log para verificar o valor de userRole
+  console.log('userRole:', userRole);
 
   // Função para logout usando o contexto
   const handleLogout = () => {
@@ -40,17 +42,36 @@ function Header() {
           </>
         ) : (
           <>
-          <li className="navbar-item">
+            <li className="navbar-item">
               <Link to="/" className="navbar-link">Home</Link>
             </li>
-          <li className="navbar-item">
-              <Link to="/create-event" className="navbar-link">Criar Evento</Link>
+
+            {/* Verificação correta para userRole como string */}
+            {userRole === 2 && (
+              <>
+                <li className="navbar-item">
+                  <Link to="/create-event" className="navbar-link">Criar Evento</Link>
+                </li>
+                <li className="navbar-item">
+                  <Link to="/my-events-org" className="navbar-link">Meus Eventos</Link>
+                </li>
+              </>
+            )}
+
+      {userRole === 1 && (
+
+              <li className="navbar-item">
+                <Link to="/my-events-user" className="navbar-link">Meus Eventos</Link>
+              </li>
+      )}
+
+
+
+            <li className="navbar-item">
+              <Link to="/login" className="navbar-link" onClick={handleLogout}>
+                Logout
+              </Link>
             </li>
-          <li className="navbar-item">
-            <Link to="/login" className="navbar-link" onClick={handleLogout}>
-              Logout
-            </Link>
-          </li>
           </>
         )}
       </ul>
