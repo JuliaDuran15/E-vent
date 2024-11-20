@@ -1,52 +1,77 @@
-// AuthContext.js
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState } from 'react';
 
-
-
+// Cria o contexto de autenticação
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userRole, setUserRole] = useState(null); // Novo estado para o "role"
-  const [userId, setUserId] = useState(null); // Novo estado para o "userId"
-  const [name, setName] = useState(null); 
+  const [userRole, setUserRole] = useState(null); // 1 para usuário, 2 para organizador
+  const [userName, setUserName] = useState('');
+  const [userId, setUserId] = useState(null);
 
-
-  useEffect(() => {
-    const userIsLoggedIn = localStorage.getItem('isLoggedIn');
-
-    setIsLoggedIn(userIsLoggedIn === 'true');
-    
-
-  }, []);
-
+  // Função para fazer login
   const login = (role, name, userId) => {
-    console.log('Login chamado com:', { role, name, userId });
-    localStorage.setItem('isLoggedIn', 'true');
-
-    setUserRole(role);
-    setName(name);
-    setUserId(userId);
     setIsLoggedIn(true);
+    setUserRole(role);
+    setUserName(name);
+    setUserId(userId);
+
+    // Armazenar informações no localStorage para persistência
+    localStorage.setItem('isLoggedIn', true);
+    localStorage.setItem('userRole', role);
+    localStorage.setItem('userName', name);
+    localStorage.setItem('userId', userId);
   };
-  
 
-
+  // Função para fazer logout
   const logout = () => {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('name');
-
     setIsLoggedIn(false);
     setUserRole(null);
-    setName(null);
+    setUserName('');
     setUserId(null);
 
-
+    // Remover informações do localStorage
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userId');
   };
 
+  // Persistência de login ao recarregar a página
+  React.useEffect(() => {
+    const storedIsLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    const storedUserRole = localStorage.getItem('userRole');
+    const storedUserName = localStorage.getItem('userName');
+    const storedUserId = localStorage.getItem('userId');
+
+    if (storedIsLoggedIn) {
+      setIsLoggedIn(true);
+      setUserRole(storedUserRole);
+      setUserName(storedUserName);
+      setUserId(storedUserId);
+    
+      console.log('Dados restaurados do localStorage:', {
+        storedIsLoggedIn,
+        storedUserRole,
+        storedUserName,
+        storedUserId,
+      });
+    } else {
+      console.log('Nenhum dado de login encontrado no localStorage');
+    }
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ isLoggedIn, userRole,name, userId,login, logout }}>
+    <AuthContext.Provider
+      value={{
+        isLoggedIn,
+        userRole,
+        userName,
+        userId,
+        login,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

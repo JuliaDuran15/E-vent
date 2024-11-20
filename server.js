@@ -34,7 +34,7 @@ app.post('/create-event', async (req, res) => {
     // Criar o evento
     const newEvent = await Event.create({ name, date, location, participants, organizerId });
     console.log('Evento criado:', newEvent);
-    res.status(201).json({ message: 'Evento criado com sucesso!' });
+    res.status(201).json({ message: 'Evento criado com sucesso.' });
   } catch (error) {
     console.error('Erro ao criar o evento:', error);
     res.status(500).json({ message: 'Erro ao criar o evento.', error: error.message });
@@ -54,18 +54,26 @@ app.get('/my-events/:organizerId', async (req, res) => {
   }
 });
 
-
-// Rota para registrar um novo cliente
 app.post('/register', async (req, res) => {
-  console.log(req.body); // Verifica os dados que estão sendo recebidos
+  const { email } = req.body;
+
   try {
+    // Verifica se o email já está registrado
+    const existingUser = await User.findOne({ where: { email } });
+
+    if (existingUser) {
+      return res.status(400).json({ message: 'E-mail já está em uso. Por favor, use outro.' });
+    }
+
+    // Cria um novo usuário se o email não estiver registrado
     const newUser = await User.create(req.body);
     res.json({ message: 'Usuário registrado com sucesso!' });
   } catch (error) {
-    console.error('Erro ao registrar usuário:', error); // Verifique qualquer erro
+    console.error('Erro ao registrar usuário:', error);
     res.status(500).json({ message: 'Erro ao registrar o usuário.' });
   }
 });
+
 
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
@@ -104,27 +112,46 @@ app.post('/login', async (req, res) => {
 // Rota para listar todos os eventos
 app.get('/events', async (req, res) => {
   try {
-    const events = await Event.findAll();
-    res.json(events);
+    const events = await Event.findAll({
+      include: [
+        {
+          model: EventParticipants,
+          attributes: ['userId'], // Somente o ID dos participantes
+        },
+      ],
+    });
+
+    // Formate os eventos para incluir `participantsList`
+    const formattedEvents = events.map((event) => ({
+      ...event.toJSON(),
+      participantsList: event.EventParticipants.map((participant) => participant.userId),
+    }));
+
+    res.json(formattedEvents);
   } catch (error) {
     console.error('Erro ao buscar eventos:', error);
     res.status(500).json({ message: 'Erro ao buscar eventos' });
   }
 });
 
-
-// Rota para inscrever um usuário em um evento
 app.post('/join-event', async (req, res) => {
   const { userId, eventId } = req.body;
 
+  if (!userId || !eventId) {
+    return res.status(400).json({ message: 'Dados incompletos. Envie userId e eventId.' });
+  }
+
   try {
-    // Verificar se o evento existe
     const event = await Event.findByPk(eventId);
     if (!event) {
       return res.status(404).json({ message: 'Evento não encontrado.' });
     }
 
-    // Verificar se o usuário já está inscrito no evento
+    // Verifica se o evento já atingiu o limite de participantes
+    if (event.currentParticipants >= event.participants) {
+      return res.status(400).json({ message: 'O evento já atingiu o limite de participantes.' });
+    }
+
     const existingParticipant = await EventParticipants.findOne({
       where: { userId, eventId },
     });
@@ -133,78 +160,207 @@ app.post('/join-event', async (req, res) => {
       return res.status(400).json({ message: 'Você já está inscrito neste evento.' });
     }
 
-    // Inscrever o usuário no evento
-    await EventParticipants.create({ userId, eventId });
+    // Iniciar transação para evitar inconsistências
+    const result = await sequelize.transaction(async (t) => {
+      // Criar registro de inscrição
+      await EventParticipants.create({ userId, eventId }, { transaction: t });
 
-    // Incrementar o número de participantes no evento
-    event.participants += 1;
-    await event.save();
+      // Incrementar o número de participantes atualmente inscritos
+      event.currentParticipants += 1;
+      await event.save({ transaction: t });
 
-    res.json({ message: 'Inscrição realizada com sucesso!' });
+      return event; // Retorna o evento atualizado
+    });
+
+    res.json({
+      message: 'Inscrição realizada com sucesso!',
+      event: {
+        id: result.id,
+        name: result.name,
+        date: result.date,
+        location: result.location,
+        currentParticipants: result.currentParticipants,
+        maxParticipants: result.participants,
+      },
+    });
   } catch (error) {
     console.error('Erro ao inscrever usuário no evento:', error);
     res.status(500).json({ message: 'Erro ao inscrever usuário no evento.' });
   }
 });
 
-// Rota para adicionar cliente VIP a um evento
-app.post('/add-vip', async (req, res) => {
-  const { eventId, vipEmail } = req.body;
+
+
+app.get('/event-participants/:eventId', async (req, res) => {
+  const { eventId } = req.params;
 
   try {
-    const event = await Event.findOne({ where: { id: eventId } });
+    // Verificar se o evento existe
+    const event = await Event.findByPk(eventId);
     if (!event) {
       return res.status(404).json({ message: 'Evento não encontrado.' });
     }
 
-    // Verifica se a lista VIP existe, se não, cria uma lista vazia
-    if (!event.vipList) {
-      event.vipList = [];
-    }
+    // Buscar participantes com informações do usuário
+    const participants = await EventParticipants.findAll({
+      where: { eventId },
+      include: [
+        {
+          model: User,
+          attributes: ['id', 'name', 'email'], // Informações relevantes do usuário
+        },
+      ],
+    });
 
-    // Verifica se o cliente VIP já está na lista
-    if (event.vipList.includes(vipEmail)) {
-      return res.status(400).json({ message: 'Cliente já é VIP.' });
-    }
+    // Formatar resposta
+    const participantList = participants.map((p) => ({
+      userId: p.User.id,
+      name: p.User.name,
+      email: p.User.email,
+      isVip: p.isVip || false, // Status VIP
+    }));
 
-    // Adiciona o cliente VIP
-    event.vipList.push(vipEmail);
-    await event.save();
-
-    res.json({ message: 'Cliente VIP adicionado com sucesso.' });
+    res.json(participantList);
   } catch (error) {
-    console.error('Erro ao adicionar cliente VIP:', error);
-    res.status(500).json({ message: 'Erro ao adicionar cliente VIP.' });
+    console.error('Erro ao buscar participantes do evento:', error);
+    res.status(500).json({ message: 'Erro ao buscar participantes do evento.' });
   }
 });
 
 
-// Rota para listar eventos em que o usuário está inscrito
+// Rota para atualizar o status VIP de um participante
+app.post('/update-vip-status', async (req, res) => {
+  const { userId, eventId, isVip } = req.body;
+
+  if (!userId || !eventId || typeof isVip !== 'boolean') {
+    return res.status(400).json({ message: 'Dados incompletos. Envie userId, eventId e isVip.' });
+  }
+
+  try {
+    // Verificar se o registro de participação existe
+    const participant = await EventParticipants.findOne({
+      where: { userId, eventId },
+    });
+
+    if (!participant) {
+      return res.status(404).json({ message: 'Participante não encontrado no evento.' });
+    }
+
+    // Atualizar o status VIP
+    participant.isVip = isVip;
+    await participant.save();
+
+    res.json({ message: 'Status VIP atualizado com sucesso.', userId, eventId, isVip });
+  } catch (error) {
+    console.error('Erro ao atualizar status VIP:', error);
+    res.status(500).json({ message: 'Erro ao atualizar status VIP.' });
+  }
+});
+
+app.get('/event-participants/:eventId', async (req, res) => {
+  const { eventId } = req.params;
+
+  try {
+    const participants = await EventParticipants.findAll({
+      where: { eventId },
+      include: [
+        {
+          model: User,
+          attributes: ['id', 'name', 'email'],
+        },
+      ],
+    });
+
+    const formattedParticipants = participants.map((participant) => ({
+      userId: participant.User.id,
+      name: participant.User.name,
+      email: participant.User.email,
+      isVip: participant.isVip,
+    }));
+
+    res.json(formattedParticipants);
+  } catch (error) {
+    console.error('Erro ao buscar participantes do evento:', error);
+    res.status(500).json({ message: 'Erro ao buscar participantes do evento.' });
+  }
+});
+
+
 app.get('/my-events-user/:userId', async (req, res) => {
   const { userId } = req.params;
 
   try {
-    // Verificar se o userId foi passado corretamente
-    console.log('userId recebido:', userId);
-
-    // Buscar eventos nos quais o usuário está inscrito
     const events = await Event.findAll({
       include: [
         {
           model: EventParticipants,
           where: { userId },
           required: true,
+          attributes: ['isVip'], // Inclui o status VIP
         },
       ],
+      attributes: ['id', 'name', 'date', 'location', 'currentParticipants', 'participants', 'status'], // Campos do evento
     });
 
-    // Verificar se os eventos foram encontrados
-    console.log('Eventos encontrados:', events);
+    // Formatar a resposta para incluir os dados necessários
+    const formattedEvents = events.map((event) => ({
+      id: event.id,
+      name: event.name,
+      date: event.date,
+      location: event.location,
+      currentParticipants: event.currentParticipants,
+      participants: event.participants,
+      status: event.status,
+      isVip: event.EventParticipants[0].isVip, // Inclui o status VIP
+    }));
+
+    res.json(formattedEvents);
   } catch (error) {
     console.error('Erro ao buscar eventos do usuário:', error);
     res.status(500).json({ message: 'Erro ao buscar eventos do usuário.' });
   }
 });
+
+
+// Rota para cancelar (marcar como cancelado) um evento
+app.put('/cancel-event/:eventId', async (req, res) => {
+  const { eventId } = req.params;
+
+  try {
+    const event = await Event.findByPk(eventId);
+    if (!event) {
+      return res.status(404).json({ message: 'Evento não encontrado.' });
+    }
+
+    // Atualizar o status do evento para "cancelado"
+    event.status = 'cancelado'; // Adicione uma coluna "status" no modelo, se necessário
+    await event.save();
+
+    res.status(200).json({ message: 'Evento marcado como cancelado.' });
+  } catch (error) {
+    console.error('Erro ao cancelar evento:', error);
+    res.status(500).json({ message: 'Erro ao cancelar evento.' });
+  }
+});
+
+// Rota para apagar (excluir) definitivamente um evento
+app.delete('/delete-event/:eventId', async (req, res) => {
+  const { eventId } = req.params;
+
+  try {
+    const event = await Event.findByPk(eventId);
+    if (!event) {
+      return res.status(404).json({ message: 'Evento não encontrado.' });
+    }
+
+    await Event.destroy({ where: { id: eventId } });
+    res.status(200).json({ message: 'Evento apagado com sucesso.' });
+  } catch (error) {
+    console.error('Erro ao apagar evento:', error);
+    res.status(500).json({ message: 'Erro ao apagar evento.' });
+  }
+});
+
 
 
 // Iniciar o servidor

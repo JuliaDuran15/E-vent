@@ -14,7 +14,8 @@ import './App.css';
 import Home from './components/UserView';
 import EventList from './components/EventList';
 import MyEventsOrg from './components/MyEventsOrg';
-import MyEventsUser from './components/MyEventsUser';
+import MyEvents from './components/MyEvents';
+import EventParticipants from './components/EventParticipants';
 
 
 function App() {
@@ -55,8 +56,9 @@ function App() {
               <MyEventsOrg />
             </ProtectedRoute>
           } />
-        <Route path="/my-events-user" element={<MyEventsUser />} />
+        <Route path="/my-events" element={<MyEvents />} />
 
+        <Route path="/event-participants/:eventId" element={<EventParticipants />} />
 
           <Route path="/unauthorized" element={<Unauthorized />} />
 

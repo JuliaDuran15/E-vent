@@ -1,20 +1,17 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import '../styles/RegisterOrganizer.css'; // Importa o arquivo de estilo
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from './AuthContext'; // Importa o AuthContext
 
 function RegisterOrganizer() {
-  const { login } = useContext(AuthContext); // Acessa a função de login do contexto
   const [organizer, setOrganizer] = useState({
     name: '',
     email: '',
     password: '',
-    role: 2 // 2 = Organizador
+    role: 2, // 2 = Organizador
   });
   const [message, setMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(null); // Para controlar se a mensagem é de sucesso ou erro
-  const [welcomeMessage, setWelcomeMessage] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -25,26 +22,18 @@ function RegisterOrganizer() {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:5000/register', organizer);
-      setMessage(response.data.message);
+      setMessage(`Bem-vindo(a), ${organizer.name}! Seu cadastro foi realizado com sucesso!`);
       setIsSuccess(true); // Define como sucesso
-      setWelcomeMessage(`Bem-vindo(a), ${organizer.name}! Seu cadastro foi realizado com sucesso!`);
-      login(organizer.role); // Chama a função de login para atualizar o estado de autenticação
-        if (organizer.role === 1){
-          navigate('/userview');
-        }
-        else if(organizer.role === 2){
-          navigate('/orgview');
-        }
-        
 
+      // Redireciona para a página de login após 2 segundos
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
     } catch (error) {
-      setMessage('Erro ao registrar o organizador.');
+      setMessage('Erro ao registrar o organizador. Por favor, tente novamente.');
       setIsSuccess(false); // Define como erro
-
     }
   };
-  console.log(organizer); // ou console.log(organizer);
-
 
   return (
     <div className="organizer-container">
@@ -83,14 +72,8 @@ function RegisterOrganizer() {
       {message && (
         <p className={isSuccess ? 'message-success' : 'message-error'}>{message}</p>
       )}
-
-      {isSuccess && welcomeMessage && (
-        <p className="welcome-message">{welcomeMessage}</p>
-      )}
-
     </div>
   );
-
 }
 
 export default RegisterOrganizer;

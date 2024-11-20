@@ -1,0 +1,104 @@
+/* Estilo para o container principal */
+.event-list {
+    margin: 100px auto; /* Espaço para não ficar atrás da navbar */
+    max-width: 1200px; /* Largura máxima */
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9); /* Fundo branco translúcido */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Título principal */
+  .event-list h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  /* Títulos das seções */
+  .event-list h3 {
+    color: #4e0993;
+    margin-top: 20px;
+    text-transform: uppercase;
+  }
+  
+  /* Container para os cartões */
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center; /* Centraliza os cartões */
+  }
+  
+  /* Estilo dos cartões */
+  .event-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Cartões cancelados */
+  .event-card.canceled {
+    background-color: #fce4e4;
+    border-color: #f5a5a5;
+  }
+  
+  /* Título dos eventos */
+  .event-card h3 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  /* Texto dos detalhes do evento */
+  .event-card p {
+    color: #666;
+    font-size: 14px;
+    margin: 5px 0;
+  }
+  
+  /* Botões nos cartões */
+  .event-card button {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #4e0993;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .event-card button:hover {
+    background-color: #3d0773;
+    transform: translateY(-2px);
+  }
+  
+  /* Botão de apagar evento */
+  .delete-event-btn {
+    background-color: #e60000;
+  }
+  
+  .delete-event-btn:hover {
+    background-color: #cc0000;
+  }
+  
+  /* Estilo para o texto de carregamento */
+  .event-list p {
+    text-align: center;
+    font-size: 16px;
+    color: #666;
+  }

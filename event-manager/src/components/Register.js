@@ -1,16 +1,14 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import '../styles/Register.css'; // Importa o arquivo de estilo
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from './AuthContext'; // Importa o AuthContext
 
 function Register() {
-  const { login } = useContext(AuthContext); // Acessa a função de login do contexto
   const [user, setUser] = useState({
     name: '',
     email: '',
     password: '',
-    role: 1 // 1 = Cliente
+    role: 1, // 1 = Cliente
   });
   const [message, setMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(null); // Para controlar se a mensagem é de sucesso ou erro
@@ -24,16 +22,15 @@ function Register() {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:5000/register', user);
+
+      // Exibe mensagem de sucesso
       setMessage(response.data.message);
-      setIsSuccess(true); // Define como sucesso
-      login(user.role); // Chama a função de login para atualizar o estado de autenticação
-        if (user.role === 1){
-          navigate('/userview');
-        }
-        else if(user.role === 2){
-          navigate('/orgview');
-        }
-        
+      setIsSuccess(true);
+
+      // Redireciona para a página de login após o registro
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000); // Tempo para mostrar a mensagem antes de redirecionar
     } catch (error) {
       setMessage('Erro ao registrar o usuário.');
       setIsSuccess(false); // Define como erro

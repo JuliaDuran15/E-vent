@@ -28,6 +28,17 @@ function CreateEvent() {
       return;
     }
 
+  // Verifica se a data é futura
+  const selectedDate = new Date(event.date);
+  const currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0); // Remove a parte de hora da data atual para comparar apenas a data
+
+  if (selectedDate <= currentDate) {
+    setMessage('A data do evento deve ser futura.');
+    setIsSuccess(false);
+    return;
+  }
+
     try {
       console.log('Dados enviados para o backend:', {
         ...event,
@@ -70,6 +81,7 @@ function CreateEvent() {
           onChange={handleChange}
           required
           className="input-field"
+          min={new Date().toISOString().split('T')[0]} // Define a data mínima como hoje
         />
 
         <input

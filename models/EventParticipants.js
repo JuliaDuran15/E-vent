@@ -1,5 +1,3 @@
-// models/EventParticipants.js
-
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const User = require('./User');
@@ -22,8 +20,19 @@ const EventParticipants = sequelize.define('EventParticipants', {
       key: 'id',
     },
   },
+  isVip: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false, // Não VIP por padrão
+  },
 }, {
   timestamps: false,
 });
+
+// Definir associações para os relacionamentos
+User.hasMany(EventParticipants, { foreignKey: 'userId' });
+EventParticipants.belongsTo(User, { foreignKey: 'userId' });
+
+Event.hasMany(EventParticipants, { foreignKey: 'eventId' });
+EventParticipants.belongsTo(Event, { foreignKey: 'eventId' });
 
 module.exports = EventParticipants;

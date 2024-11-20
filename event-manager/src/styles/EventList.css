@@ -103,3 +103,100 @@
     cursor: not-allowed;
     box-shadow: none;
 }
+
+/* Divisores para separar seções */
+.section-divider {
+    width: 100%;
+    height: 2px;
+    background-color: #ccc;
+    margin: 20px 0;
+    opacity: 0.8;
+}
+
+/* Estilo para eventos cancelados */
+.event-card.canceled {
+    background-color: #f8d7da; /* Fundo claro avermelhado */
+    border: 1px solid #f5c6cb;
+}
+
+.event-card.canceled h3 {
+    color: #721c24;
+}
+.event-card.active h3 {
+    color: #46008d;
+}
+
+.event-card.canceled p {
+    color: #721c24;
+}
+
+.view-participants-btn {
+    background-color: #4CAF50; /* Verde suave */
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-bottom: 10px;
+    width: 100%; /* Preenche a largura do card */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.view-participants-btn:hover {
+    background-color: #45a049; /* Verde mais escuro ao passar o mouse */
+    transform: translateY(-2px);
+}
+
+/* Botão: Cancelar Evento */
+.cancel-event-btn {
+    background-color: #FF9800; /* Laranja */
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-bottom: 10px;
+    width: 100%; /* Preenche a largura do card */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cancel-event-btn:hover {
+    background-color: #fb8c00; /* Laranja mais escuro ao passar o mouse */
+    transform: translateY(-2px);
+}
+
+/* Botão: Apagar Evento */
+.delete-event-btn {
+    background-color: #f44336; /* Vermelho */
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-bottom: 10px;
+    width: 100%; /* Preenche a largura do card */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.delete-event-btn:hover {
+    background-color: #e53935; /* Vermelho mais escuro ao passar o mouse */
+    transform: translateY(-2px);
+}
+
+.event-section h3 {
+    font-size: 18px;
+    color: #b07ee2; /* Cor destacada para combinar com o tema */
+    text-align: center; /* Centraliza o texto */
+    text-transform: uppercase; /* Transforma o texto para maiúsculas */
+   letter-spacing: 1px; /* Espaçamento entre letras */
+    font-weight: bold;
+  }

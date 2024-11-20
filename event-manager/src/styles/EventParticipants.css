@@ -1,0 +1,118 @@
+/* EventParticipants.css */
+
+.event-participants {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 800px;
+    width: 90%;
+    margin-top: 50px;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.event-participants h2 {
+    font-size: 28px;
+    color: #9753db;
+    margin-bottom: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Lista de Participantes */
+.participants-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.participant-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.participant-item:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.participant-item span {
+    font-size: 16px;
+    color: #333;
+    margin-right: 10px;
+}
+
+/* Status VIP */
+.vip-status {
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.vip-status.vip {
+    color: #4e0993;
+}
+
+.vip-status.not-vip {
+    color: #666;
+}
+
+/* Botão de Alternar Status VIP */
+.toggle-vip-btn {
+    background-color: #4e0993;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-vip-btn:hover {
+    background-color: #3d0773;
+    transform: translateY(-2px);
+}
+
+.toggle-vip-btn:active {
+    transform: translateY(1px);
+}
+
+.toggle-vip-btn:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* Barra de Pesquisa */
+.search-bar {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .search-bar:focus {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-color: #4e0993;
+  }
+  

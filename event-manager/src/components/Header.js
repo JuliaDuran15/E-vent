@@ -61,7 +61,7 @@ function Header() {
       {userRole === 1 && (
 
               <li className="navbar-item">
-                <Link to="/my-events-user" className="navbar-link">Meus Eventos</Link>
+                <Link to="/my-events" className="navbar-link">Meus Eventos</Link>
               </li>
       )}
 

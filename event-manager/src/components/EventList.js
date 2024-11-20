@@ -5,54 +5,63 @@ import ShareEvent from './ShareEvent';
 import { AuthContext } from './AuthContext';
 
 function EventList() {
-  const { userId } = useContext(AuthContext);
+  const { isLoggedIn, userId } = useContext(AuthContext);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [joinedEvents, setJoinedEvents] = useState([]);
 
-
+  // Fetch events from the backend
   useEffect(() => {
-    // Fetch events from the backend
     const fetchEvents = async () => {
       try {
-        const response = await fetch('http://localhost:5000/events');
-        const data = await response.json();
-        setEvents(data);
+        const response = await axios.get('http://localhost:5000/events');
+        const activeEvents = response.data.filter((event) => event.status === 'ativo');
+
+        setEvents(activeEvents);
       } catch (error) {
         console.error('Erro ao buscar eventos:', error);
       } finally {
-        setLoading(false); // Define o carregamento como falso após a tentativa de fetch
+        setLoading(false);
       }
     };
 
     fetchEvents();
   }, []);
 
-// Função para participar de um evento
-const handleJoinEvent = async (eventId) => {
-  if (!userId) {
-    alert('Por favor, faça login para se inscrever no evento.');
-    return;
-  }
-
-  try {
-    const response = await axios.post('http://localhost:5000/join-event', {
-      userId,
-      eventId,
-    });
-    alert(response.data.message);
-    setJoinedEvents((prev) => [...prev, eventId]);
-  } catch (error) {
-    console.error('Erro ao se inscrever no evento:', error);
-    if (error.response && error.response.status === 400) {
-      alert('Você já está inscrito neste evento.');
-      setJoinedEvents((prev) => [...prev, eventId]);
-    } else {
-      alert('Erro ao se inscrever no evento.');
+  // Função para participar de um evento
+  const handleJoinEvent = async (eventId) => {
+    if (!isLoggedIn || !userId) {
+      alert('Por favor, faça login para se inscrever no evento.');
+      return;
     }
-  }
-};
 
+    try {
+      const response = await axios.post('http://localhost:5000/join-event', {
+        userId,
+        eventId,
+      });
+      alert(response.data.message);
+
+      // Atualiza o estado local após participar de um evento
+      setEvents((prevEvents) =>
+        prevEvents.map((event) =>
+          event.id === eventId
+            ? {
+                ...event,
+                currentParticipants: event.currentParticipants + 1,
+                participantsList: [...(event.participantsList || []), userId],
+              }
+            : event
+        )
+      );
+    } catch (error) {
+      console.error('Erro ao se inscrever no evento:', error);
+      if (error.response?.status === 400) {
+        alert('Você já está inscrito neste evento.');
+      } else {
+        alert('Erro ao se inscrever no evento.');
+      }
+    }
+  };
 
   return (
     <div className="event-list">
@@ -63,22 +72,29 @@ const handleJoinEvent = async (eventId) => {
         <p>Não há eventos disponíveis no momento.</p>
       ) : (
         <div className="card-container">
-          {events.map(event => (
+          {events.map((event) => (
             <div key={event.id} className="event-card">
               <h3>{event.name}</h3>
               <p>Data: {new Date(event.date).toLocaleDateString()}</p>
               <p>Localização: {event.location}</p>
-              <p>Participantes: {event.participants}</p>
-              {/* Botão para participar do evento */}
-              <button
-                className="join-btn"
-                onClick={() => handleJoinEvent(event.id)}
-                disabled={joinedEvents.includes(event.id)}
-              >
-                {joinedEvents.includes(event.id) ? 'Já Inscrito' : 'Participar'}
-              </button>
+              <p>Participantes: {event.currentParticipants}/{event.participants}</p>
+              {isLoggedIn && (
+                <button
+                  className="join-btn"
+                  onClick={() => handleJoinEvent(event.id)}
+                  disabled={
+                    event.currentParticipants >= event.participants ||
+                    (event.participantsList || []).includes(userId)
+                  }
+                >
+                  {event.currentParticipants >= event.participants
+                    ? 'Evento Cheio'
+                    : (event.participantsList || []).includes(userId)
+                    ? 'Já Inscrito'
+                    : 'Participar'}
+                </button>
+              )}
               <ShareEvent event={event} />
-              
             </div>
           ))}
         </div>
