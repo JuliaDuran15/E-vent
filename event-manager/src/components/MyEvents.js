@@ -55,8 +55,10 @@ function MyEvents() {
                   <p>Data: {new Date(event.date).toLocaleDateString()}</p>
                   <p>Localização: {event.location}</p>
                   <p>Participantes: {event.currentParticipants}/{event.participants}</p>
-                  {event.isVip && <p className="vip-badge">Você é VIP neste evento</p>}
-                </div>
+                
+                  <span className={`vip-status ${event.isVip ? 'vip' : 'not-vip'}`}>
+                        {event.isVip ? 'VIP' : 'Não VIP'}
+                      </span>                </div>
               ))}
               </div>
             )}
@@ -75,7 +77,6 @@ function MyEvents() {
                     <p>Data: {new Date(event.date).toLocaleDateString()}</p>
                     <p>Localização: {event.location}</p>
                     <p>Participantes: {event.currentParticipants}/{event.participants}</p>
-                    {event.isVip && <p className="vip-badge">Você é VIP neste evento</p>}
                   </div>
                 ))}
               </div>

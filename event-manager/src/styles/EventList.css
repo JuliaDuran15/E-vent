@@ -200,3 +200,16 @@
    letter-spacing: 1px; /* Espaçamento entre letras */
     font-weight: bold;
   }
+
+  .vip-status {
+    font-weight: bold;
+  }
+  
+  .vip {
+    color: gold;
+  }
+  
+  .not-vip {
+    color: gray;
+  }
+  
